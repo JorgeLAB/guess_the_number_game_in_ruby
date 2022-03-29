@@ -1,79 +1,65 @@
-puts 'Welcome to the guess game'
-puts 'Whats your name? '
-nome = gets
+def give_welcome
+  puts 'Welcome to the guess game'
+  puts 'Whats your name? '
+  nome = gets
 
-5.times do 
-	puts "\n"
+  5.times do
+    puts "\n"
+  end
+
+  puts 'We are begin the game for you, ' + nome.strip
 end
 
-puts 'Começaremos o jogo para você, ' + nome
-puts 'Choose a secret number between 0 and 200...'
-numero_secreto = 175
-puts "\nChosen... que tal adivinhar hoje nosso número secreto?\n"
-
-5.times do 
-	puts "\n"
+def secret_number_draw
+  puts 'Choose a secret number between 0 and 200...'
+  secret_number = rand(1...200)
+  puts "\nChosen... how about guessing our secret number today?\n"
+  secret_number
 end
 
-puts 'Attempt 1'
-puts 'Choose a number'
-chute = gets
-puts 'Did you get it right? You kicked ' + chute
-
-if numero_secreto == chute.to_i
-	puts 'Go it right!'
-else
-	maior = numero_secreto > chute.to_i
-
-	if maior
-	  puts 'Secret number is more than it was kicked'
-	else
-	  puts 'Secret number is less than it was kicked'
-	end
+def choose_a_number(attempt, attempt_limit)
+  puts "\n\n\n\n\n"
+  puts "Attempt " + attempt.to_s + " of " + attempt_limit.to_s
+  puts "Choose a number"
+  kicked = gets
+  puts "Did you get it right? You kicked " + kicked
+  kicked
 end
 
-puts 'Chosen... que tal adivinhar hoje nosso número secreto?'
+def verification_kicked(kicked, secret_number)
+  if secret_number == kicked.to_i
+    puts 'Go it right!'
+    true
+  else
+    more_than_secret_number = secret_number > kicked.to_i
 
-5.times do 
-	puts "\n"
+    type = more_than_secret_number ? 'more' : 'less'
+    puts "Secret number is #{type} than it was kicked"
+
+    false
+  end
 end
 
-puts 'Attempt 2'
-puts 'Choose a number'
-chute = gets
-puts 'Did you get it right? You kicked ' + chute
+give_welcome
+secret_number = secret_number_draw
 
-if numero_secreto == chute.to_i
-	puts 'Go it right!'
-else
-	maior = numero_secreto > chute.to_i
+kickes = []
+attempt_limit = 10
+points_so_far = 1000
 
-	if maior
-	  puts 'Secret number is more than it was kicked'
-	else
-	  puts 'Secret number is less than it was kicked'
-	end
+for attempt in 1..attempt_limit
+  3.times do
+    puts "\n"
+  end
+
+  puts kickes
+
+  kicked = choose_a_number(attempt, attempt_limit)
+  break if verification_kicked(kicked, secret_number)
+
+  kickes << kicked
+  points_so_far -= (secret_number.to_i - kicked.to_i).abs
 end
 
-puts 'Chosen... que tal adivinhar hoje nosso número secreto?'
-
-5.times do 
-	puts "\n"
-end
-
-puts 'Attempt 3'
-puts 'Choose a number'
-chute = gets
-puts 'Did you get it right? You kicked ' + chute
-
-if numero_secreto == chute.to_i
-	puts 'Go it right!'
-else
-	maior = numero_secreto > chute.to_i
-
-	if maior
-	  puts 'Secret number is more than it was kicked'
-	else
-	  puts 'Secret number is less than it was kicked'
-	end
-end
+puts "The number secret is #{secret_number}"
+puts "Result #{points_so_far}"
